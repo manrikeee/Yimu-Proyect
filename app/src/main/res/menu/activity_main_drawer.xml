@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/a"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Reservar pista" />
+        <item
+            android:id="@+id/b"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Ver mis actividades" />
+        <item
+            android:id="@+id/c"
+            android:icon="@drawable/ic_menu_share"
+
+            android:title="Crear actividad o grupo" />
+
+        <item
+            android:icon="@drawable/ic_menu_share"
+            android:id="@+id/f"
+            android:title="Ver Actividades" />
+
+
+    </group>
+
+
+    <item android:title="Comunicación">
+        <menu>
+            <item
+                android:id="@+id/d"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Reta a otro jugador" />
+            <item
+                android:id="@+id/e"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Encuentra Amigos" />
+
+            <item
+                android:id="@+id/g"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Perfil" />
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Compartir" />
+        </menu>
+    </item>
+
+</menu>

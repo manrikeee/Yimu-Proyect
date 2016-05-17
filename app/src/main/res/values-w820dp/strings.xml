@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="texto">Lorem ipsum, dolor \n sit amet</string>
+</resources>

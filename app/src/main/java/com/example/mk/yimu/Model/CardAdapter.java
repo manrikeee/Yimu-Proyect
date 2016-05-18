@@ -1,15 +1,20 @@
 package com.example.mk.yimu.Model;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +22,7 @@ import com.example.mk.yimu.Interface.ActividadService;
 import com.example.mk.yimu.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -80,7 +86,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.EventoViewHold
 
     @Override
     public void onBindViewHolder(final EventoViewHolder viewHolder, final int i) {
-        //viewHolder.imagen.setImageResource(R.drawable.img1);
+        viewHolder.imagen.setImageResource(R.drawable.img1);
         viewHolder.nombre.setText(String.valueOf(items.get(i).getDeporte1()));
         viewHolder.lugar.setText(String.valueOf(items.get(i).getLugar()));
         viewHolder.boton.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +104,15 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.EventoViewHold
         });
         insertarImagenes(viewHolder);
         mostrarCapacidad(viewHolder, i);
+        viewHolder.btnusers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FMostrarActividades.getUsuariosInscritos(items.get(i).getId());
+
+            }
+        });
+
+
 
 
     }
@@ -132,6 +147,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.EventoViewHold
                     .centerCrop()
                     .into(viewHolder.imagen);
         }
+
     }
 
     public void mostrarCapacidad(EventoViewHolder viewHolder,int i){
@@ -142,13 +158,40 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.EventoViewHold
 
     }
 
-    public void SumarPlaza(int i){
+    public void SumarPlaza(final int i, final int pos){
         RestClient restClient = new RestClient();
         Retrofit retrofit = restClient.getRetrofit();
 
 
         ActividadService servicio = retrofit.create(ActividadService.class);
         Call<Integer> respuesta = servicio.SumarPlaza(i);
+
+        respuesta.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                Log.d("ERROR3",":Usuarioid:"+Usuario.id1+Usuario.nombre1+"MAIL:"+Usuario.email1);
+
+                Inscribir(i,pos);
+
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                Toast tq = Toast.makeText(FMostrarActividades.card.getContext(), "Error al registrarme", Toast.LENGTH_SHORT);
+                tq.show();
+
+            }
+        });
+
+    }
+    public void Inscribir(int i,int pos){
+        RestClient restClient = new RestClient();
+        Retrofit retrofit = restClient.getRetrofit();
+
+
+        ActividadService servicio = retrofit.create(ActividadService.class);
+        Log.d("ERROR3",":Usuarioid:"+Usuario.id1+Usuario.nombre1+"MAIL:"+Usuario.email1);
+        Call<Integer> respuesta = servicio.setActividad_usuario( Usuario.id1,items.get(pos).getId()  );
 
         respuesta.enqueue(new Callback<Integer>() {
             @Override
@@ -168,6 +211,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.EventoViewHold
         });
 
     }
+
+
 
     public void MostrarDialogo(final EventoViewHolder viewHolder,final int i){
 
@@ -190,7 +235,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.EventoViewHold
     }
 
     public void aceptar(EventoViewHolder viewHolder,int i) {
-        SumarPlaza(items.get(i).getId());
+        SumarPlaza(items.get(i).getId(), i);
 
     }
 
@@ -206,6 +251,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.EventoViewHold
         public ImageView imagen;
         public TextView nombre, capacidad, lugar;
         Button boton;
+        ImageButton btnusers;
         CardView cv;
 
         public EventoViewHolder(View v) {
@@ -216,10 +262,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.EventoViewHold
             capacidad = (TextView) v.findViewById(R.id.capacidad);
             lugar = (TextView) v.findViewById(R.id.lugar);
             boton = (Button) v.findViewById(R.id.participar);
+            btnusers = (ImageButton) v.findViewById(R.id.busuarios);
 
 
         }
     }
+
     }
 
 

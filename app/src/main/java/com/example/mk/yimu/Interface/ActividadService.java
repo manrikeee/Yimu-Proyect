@@ -1,6 +1,7 @@
 package com.example.mk.yimu.Interface;
 
 import com.example.mk.yimu.Model.Actividad;
+import com.example.mk.yimu.Model.UsuarioActividad;
 
 import java.util.List;
 
@@ -24,7 +25,13 @@ public interface ActividadService {
     Call<Integer> SumarPlaza(@Query("id") int id);
 
     @GET("/webservice/insertar_actividad_usuario.php")
-    Call<String> setActividad_usuario(@Query("id_usuario") int id_usuario, @Query("id_actividad") int actividad_usuario);
+    Call<Integer> setActividad_usuario(@Query("id_usuario") int id_usuario, @Query("id_actividad") int actividad_usuario);
+
+    @GET("/webservice/getUsuariosActividad.php")
+    Call<List<Integer>> getActividad_usuario(@Query("id_usuario") int actividad);
+
+    @GET("/webservice/getUsuariosActividad.php")
+    Call<List<UsuarioActividad>> getUsuariosInscritos(@Query("id_actividad") int id_actividad);
 
 }
 

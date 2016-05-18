@@ -23,6 +23,7 @@ public  class Usuario {
         this.id = id;
         this.tipo = tipo;
         this.edad = edad;
+        id1=id;
     }
 
     public String getNombre() {

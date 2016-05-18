@@ -127,6 +127,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                         Usuario.nombre1=response.body().getNombre();
                         Usuario.email1=response.body().getEmail();
+                        Usuario.id1=response.body().getId();
                         proceso(response);
 
 

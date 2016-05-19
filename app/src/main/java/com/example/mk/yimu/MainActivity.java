@@ -1,5 +1,6 @@
 package com.example.mk.yimu;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -18,9 +19,11 @@ import android.widget.TextView;
 
 import com.example.mk.yimu.Model.DatePickerFragment;
 import com.example.mk.yimu.Model.FMostrarActividades;
+import com.example.mk.yimu.Model.FPerfil;
 import com.example.mk.yimu.Model.FSeleccionHora;
 import com.example.mk.yimu.Model.FragmentAPista;
 import com.example.mk.yimu.Model.FragmentCactividad;
+import com.example.mk.yimu.Model.PerfilActiviy;
 import com.example.mk.yimu.Model.TimePickerFragment;
 import com.example.mk.yimu.Model.Usuario;
 
@@ -113,8 +116,9 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.d) {
 
-        } else if (id == R.id.e) {
-
+        } else if (id == R.id.g) {
+            Intent intent = new Intent(MainActivity.this, PerfilActiviy.class);
+            startActivity(intent);
         } else if (id == R.id.f) {
             fragment = new FMostrarActividades();
             fragmentTransaction = true;

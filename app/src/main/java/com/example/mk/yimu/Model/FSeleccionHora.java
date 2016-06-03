@@ -163,7 +163,7 @@ public class FSeleccionHora extends Fragment {
         llmanager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llmanager);
 
-        AdapterRecView myAdapter = new AdapterRecView( horas);
+        HorasAdapter myAdapter = new HorasAdapter( horas);
         recyclerView.setAdapter(myAdapter);
         return view;
     }

@@ -39,7 +39,7 @@ public class SignIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
         Button registrar = (Button) findViewById(R.id.registrar);
         registrar.setOnClickListener(new View.OnClickListener() {
             @Override

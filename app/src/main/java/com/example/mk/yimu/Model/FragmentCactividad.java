@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,33 +107,25 @@ public class FragmentCactividad extends Fragment {
             @Override
             public void onClick(View view) {
                 EditText deportet = (EditText) view.getRootView().findViewById(R.id.nombredeporte);
-                EditText fechat = (EditText) view.getRootView().findViewById(R.id.fecha);
+                EditText fechat = (EditText) view.getRootView().findViewById(R.id.date);
                 EditText horat = (EditText) view.getRootView().findViewById(R.id.hora);
                 EditText max_personast = (EditText) view.getRootView().findViewById(R.id.max_personas);
                 EditText plazas_disponiblest = (EditText) view.getRootView().findViewById(R.id.plazas_libres);
-                EditText timet = (EditText) view.getRootView().findViewById(R.id.date);
-                String deporte = deportet.getText().toString();
-                String fecha = deportet.getText().toString();
-                String hora = horat.getText().toString();
-                String lugar = deportet.getText().toString();
-                String estado = "1";
-                String max_personas = max_personast.getText().toString();
-                String plazas_disponibles = plazas_disponiblest.getText().toString();
-                final String BASE_URL = "http://192.168.1.11";
-                Gson gson = new GsonBuilder()
-                        .setLenient()
-                        .create();
-                HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-                OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(BASE_URL)
-                        .client(client)
-                        .addConverterFactory(GsonConverterFactory.create(gson))
-                        .build();
+                EditText lugar1= (EditText) view.getRootView().findViewById(R.id.lugar);
+                String deporte = deportet.getText().toString();
+                String fecha = fechat.getText().toString();
+                String hora = horat.getText().toString();
+                String lugar = lugar1.getText().toString();
+                int estado = 1;
+                int max_personas = Integer.parseInt(max_personast.getText().toString());
+                int plazas_disponibles = Integer.parseInt(plazas_disponiblest.getText().toString());
+
+
+                RestClient restClient =new RestClient();
+                Retrofit retrofit=restClient.getRetrofit();
                 ActividadService service = retrofit.create(ActividadService.class);
-                final Call<String> respuesta = service.CrearActividad(deporte, fecha, hora, "1", "1", max_personas, plazas_disponibles, estado);
+                final Call<String> respuesta = service.CrearActividad(deporte, "2016-05-17", "10:00:00", Usuario.id1, 1, max_personas, plazas_disponibles,lugar,"Principiante");
 
                 respuesta.enqueue(new Callback<String>() {
                     @Override
@@ -142,6 +135,7 @@ public class FragmentCactividad extends Fragment {
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
+                        Log.e("ERROR",""+t.getMessage());
 
                     }
                 });

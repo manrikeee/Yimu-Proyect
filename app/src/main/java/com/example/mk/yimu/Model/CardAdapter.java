@@ -88,7 +88,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.EventoViewHold
     public void onBindViewHolder(final EventoViewHolder viewHolder, final int i) {
         viewHolder.imagen.setImageResource(R.drawable.img1);
         viewHolder.nombre.setText(String.valueOf(items.get(i).getDeporte1()));
+        viewHolder.dia.setText(String.valueOf(items.get(i).getFecha()));
+        viewHolder.hora.setText(String.valueOf(items.get(i).getHora()));
         viewHolder.lugar.setText(String.valueOf(items.get(i).getLugar()));
+        viewHolder.nivel.setText(String.valueOf(items.get(i).getNivel()));
         viewHolder.boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -249,7 +252,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.EventoViewHold
 
         // Campos respectivos de un item
         public ImageView imagen;
-        public TextView nombre, capacidad, lugar;
+        public TextView nombre, capacidad, lugar,hora,dia,nivel;
         Button boton;
         ImageButton btnusers;
         CardView cv;
@@ -263,6 +266,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.EventoViewHold
             lugar = (TextView) v.findViewById(R.id.lugar);
             boton = (Button) v.findViewById(R.id.participar);
             btnusers = (ImageButton) v.findViewById(R.id.busuarios);
+            hora = (TextView) v.findViewById(R.id.hora3);
+            dia = (TextView) v.findViewById(R.id.dia);
+           nivel= (TextView) v.findViewById(R.id.nivel);
 
 
         }

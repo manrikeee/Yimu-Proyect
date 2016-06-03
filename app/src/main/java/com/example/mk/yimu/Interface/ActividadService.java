@@ -14,9 +14,8 @@ import retrofit2.http.Query;
  */
 public interface ActividadService {
     @GET("/webservice/CrearActividad.php")
-    Call<String> CrearActividad(@Query("deporte") String deporte, @Query("fecha") String fecha, @Query("hora") String hora, @Query("id_pista") String id_pista, @Query("id_usuario") String usuario, @Query("max_personas") String max_personas, @Query("plazas_disponibles") String plazas_disponibles, @Query("estado") String estado);
-    @GET("/webservice/CrearActividad.php")
-    Call<String> CrearActividad1(String s, @Query("deporte") String deporte, @Query("fecha") String fecha, @Query("hora") String hora, @Query("id_usuario") String usuario, @Query("max_personas") String max_personas, @Query("plazas_disponibles") String plazas_disponibles, @Query("estado") String estado);
+    Call<String> CrearActividad(@Query("deporte1") String deporte, @Query("fecha") String fecha, @Query("hora") String hora, @Query("id_espacio") int id_pista, @Query("id_usuario") int usuario, @Query("max_personas") int max_personas, @Query("plazas_disponibles") int plazas_disponibles,@Query("lugar") String lugar,@Query("nivel") String nivel);
+
 
     @GET("/webservice/obtener_actividades.php")
     Call<List<Actividad>> getActividades();

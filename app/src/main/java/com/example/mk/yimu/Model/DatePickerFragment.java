@@ -38,8 +38,8 @@ public class DatePickerFragment extends DialogFragment
     public void onDateSet(DatePicker view, int year, int month, int day) {
         month=month+1;
         date.setText(year+"-"+month+ "-"+day);
-        FragmentAPista.ObtenerHorario();
-        FragmentAPista.ObtenerReservas();
+       // FragmentAPista.ObtenerHorario();
+//        FragmentAPista.ObtenerReservas();
         // Do something with the date chosen by the user
     }
 }

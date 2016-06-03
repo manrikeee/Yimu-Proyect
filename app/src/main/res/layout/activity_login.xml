@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.mk.yimu.LoginActivity"
-    android:background="#76a82f2f"
+
     android:weightSum="1">
 
     <!-- Login progress -->
@@ -37,7 +37,7 @@
             android:id="@+id/textView3"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.24"
-            android:textColor="#ffffff"
+
             android:textAlignment="center"
             android:textSize="40dp" />
 
@@ -48,7 +48,7 @@
 
             android:id="@+id/textView2"
             android:textSize="20sp"
-            android:textColor="#ffffff"
+
             android:paddingTop="20dp"
             android:layout_weight="0.24"
             android:textAlignment="center" />
@@ -75,8 +75,8 @@
             android:singleLine="true"
             android:paddingTop="25dp"
             android:layout_gravity="center_horizontal"
-            android:textColor="#fcfcfc"
-            android:textColorHint="#7c7979" />
+
+            android:text="emilio" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -97,8 +97,8 @@
             android:singleLine="true"
             android:paddingTop="25dp"
             android:layout_gravity="center_horizontal"
-            android:textColor="#fefefe"
-            android:textColorHint="#7c7979" />
+
+            android:text="eeee" />
 
         <TextView
             android:layout_width="179dp"
@@ -108,7 +108,7 @@
             android:id="@+id/textView22"
             android:layout_gravity="center_horizontal"
             android:textSize="20dp"
-            android:textColor="#ffffff"
+
             android:singleLine="true" />
 
         <Button
@@ -119,8 +119,8 @@
             android:layout_marginTop="16dp"
             android:text="INICIAR SESIÓN"
             android:textStyle="bold"
-            android:background="#FF3EB5"
-            android:textColor="@color/colorPrimaryDark"
+
+
             android:singleLine="true" />
 
         <Space
@@ -137,7 +137,7 @@
             android:id="@+id/link"
             android:layout_gravity="center_horizontal"
             android:textSize="20dp"
-            android:textColor="#ffffff"
+
             android:singleLine="true" />
 
     </LinearLayout>

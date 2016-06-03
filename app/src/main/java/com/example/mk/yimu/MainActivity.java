@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.example.mk.yimu.Model.DatePickerFragment;
 import com.example.mk.yimu.Model.FMostrarActividades;
-import com.example.mk.yimu.Model.FPerfil;
 import com.example.mk.yimu.Model.FSeleccionHora;
 import com.example.mk.yimu.Model.FragmentAPista;
 import com.example.mk.yimu.Model.FragmentCactividad;

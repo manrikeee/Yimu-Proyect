@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +28,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mk.yimu.Interface.DeportesService;
 import com.example.mk.yimu.Interface.UsuarioService;
+import com.example.mk.yimu.Model.Deporte;
 import com.example.mk.yimu.Model.RestClient;
 import com.example.mk.yimu.Model.Usuario;
 
@@ -62,6 +65,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     WebService.ObtenerWebService hiloconexion;
     Usuario usuario = new Usuario();
     private EditText user, pass;
+    public static List<Deporte> deportes_usuario;
+    public static List<Deporte> deportes_disponibles;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -128,6 +133,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         Usuario.nombre1=response.body().getNombre();
                         Usuario.email1=response.body().getEmail();
                         Usuario.id1=response.body().getId();
+                        recibirDeportes();
+                        recibirDeportesDisponibles();
                         proceso(response);
 
 
@@ -425,7 +432,51 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             //showProgress(false);
         }
     }
+    public static void recibirDeportes(){
+        RestClient restClient =new RestClient();
+        Retrofit retrofit=restClient.getRetrofit();
+        DeportesService service = retrofit.create(DeportesService.class);
+        final Call<List<Deporte>>respuesta= service.getDeporteUsuario(Usuario.id1);
+        respuesta.enqueue(new Callback<List<Deporte>>() {
+            @Override
+            public void onResponse(Call<List<Deporte>> call, Response<List<Deporte>> response) {
+                deportes_usuario=response.body();
+                Log.e("COMPLETADO",""+response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call<List<Deporte>> call, Throwable t) {
+
+            }
+        });
+
+
+
+
 }
+    public static void recibirDeportesDisponibles(){
+        RestClient restClient =new RestClient();
+        Retrofit retrofit=restClient.getRetrofit();
+        DeportesService service = retrofit.create(DeportesService.class);
+        final Call<List<Deporte>>respuesta= service.getDeportes();
+        respuesta.enqueue(new Callback<List<Deporte>>() {
+            @Override
+            public void onResponse(Call<List<Deporte>> call, Response<List<Deporte>> response) {
+                deportes_disponibles=response.body();
+                Log.e("COMPLETADO",""+response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call<List<Deporte>> call, Throwable t) {
+
+            }
+        });
+
+
+
+
+    }
+    }
 
 
 

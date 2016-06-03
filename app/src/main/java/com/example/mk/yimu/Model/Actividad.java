@@ -19,6 +19,7 @@ public class Actividad {
     int plazas_disponibles;
     int estado;
     String lugar;
+    String nivel;
 
     public Actividad(int id, int deporte, Date fecha, Time hora, int id_usuario, int id_pista, int max_personas, int plazas_disponibles, int estado,String deporte1,String lugar) {
         this.id = id;
@@ -35,6 +36,18 @@ public class Actividad {
     }
 
     public Actividad() {
+    }
+
+    public void setHora(String hora) {
+        this.hora = hora;
+    }
+
+    public String getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(String nivel) {
+        this.nivel = nivel;
     }
 
     public String getDeporte1() {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.mk.yimu.MainActivity;
 import com.example.mk.yimu.R;
+import com.example.mk.yimu.Model.FragmentAPista;
 
 import java.sql.Time;
 import java.text.DateFormat;
@@ -35,7 +38,7 @@ public class FSeleccionHora extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private List<Espacio_Reserva> reservas=  new ArrayList<Espacio_Reserva>();
+    private static List<Espacio_Reserva> reservas=new ArrayList<>();
     private RecyclerView lista;
     private Long horas;
 
@@ -71,6 +74,7 @@ public class FSeleccionHora extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         Bundle bundle=this.getArguments();
         reservas=bundle.getParcelableArrayList("reservas");
+
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
@@ -129,23 +133,26 @@ public class FSeleccionHora extends Fragment {
                 horas_fin_citas.add(a.substring(18,23));
 
             }
-            Log.d("Tamano"," E:"+ horas_inicio_citas.get(0) + "|"+reservas.get(0).getHora_inicio().substring(0,5));
+
 
             Log.i("VALOR","apertura:"+horas_inicio_citas.get(0)+"cierre: +"+horas_fin_citas.get(0));
 
 
 
-            for (int i=0; i< horas_inicio_citas.size(); i++){
-                    for (Espacio_Reserva reserva: reservas ){
+            for (int i=0; i< horas_inicio_citas.size(); i++) {
+                if (reservas.size()>0) {
+                    for (Espacio_Reserva reserva : reservas) {
+                        //if (FragmentAPista.id_espacio==reserva.getId_espacio()){
 
-                        if (reserva.getHora_inicio().substring(0,5).equals(horas_inicio_citas.get(i))){
-                            Log.e("VALORES","VALOR 1:"+reserva.getHora_inicio().substring(0,5)+ "VALOR 2:"+horas_inicio_citas.get(i) );
+                        if (reserva.getHora_inicio().substring(0, 5).equals(horas_inicio_citas.get(i))) {
+                            Log.e("VALORES", "VALOR 1:" + reserva.getHora_inicio().substring(0, 5) + "VALOR 2:" + horas_inicio_citas.get(i));
 
                             horas_inicio_citas.remove(i);
                             horas_fin_citas.remove(i);
                         }
-                        }
+                    }
                 }
+            }
             Log.i("VALOR","citas ("+horas_inicio_citas.get(0));
             horas=new ArrayList<>();
 
@@ -195,6 +202,24 @@ public class FSeleccionHora extends Fragment {
         mListener = null;
     }
 
+
+
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
     public Time crearRango(Time time,int bloque) {
         String myTime = time.toString();
         SimpleDateFormat df = new SimpleDateFormat("HH:mm");
@@ -211,7 +236,6 @@ public class FSeleccionHora extends Fragment {
         return time1;
 
     }
-
     public String SumarTime(Time time,int periodo){
         Calendar cal=Calendar.getInstance();
         cal.setTime(time);
@@ -220,21 +244,9 @@ public class FSeleccionHora extends Fragment {
         return a;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-       
-        void onFragmentInteraction(Uri uri);
-    }
-
 
 
 }
+
+
+

@@ -156,7 +156,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.EventoViewHold
     public void mostrarCapacidad(EventoViewHolder viewHolder,int i){
         int max=items.get(i).getMax_personas();
         int disponibles=items.get(i).getPlazas_disponibles();
-        viewHolder.capacidad.setText(String.valueOf(viewHolder.capacidad.getText() +" "+(max -disponibles)+" / "+max));
+        viewHolder.capacidad.setText(String.valueOf(" "+(max -disponibles)+" / "+max));
 
 
     }

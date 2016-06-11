@@ -9,6 +9,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -58,6 +60,13 @@ public class PerfilActiviy  extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrolling);
+        /*Fade fade = new Fade();
+        fade.setDuration(5000);
+        getWindow().setEnterTransition(fade);
+        Slide slide = new Slide();
+        fade.setDuration(5000);
+        getWindow().setReturnTransition(slide);*/
+
          nombre= (TextView) findViewById(R.id.nombre);
          email= (TextView) findViewById(R.id.email);
         layout= (RelativeLayout) findViewById(R.id.deportes);
@@ -77,7 +86,7 @@ public class PerfilActiviy  extends AppCompatActivity {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mostrarUsuarios();
+                mostrarDeportes();
             }
         });
 
@@ -99,7 +108,7 @@ public class PerfilActiviy  extends AppCompatActivity {
         }
 
     }
-    public void mostrarUsuarios() {
+    public void mostrarDeportes() {
         AlertDialog.Builder builder = new AlertDialog.Builder(PerfilActiviy.this);
         builder.setTitle("Deportes Favoritos");
         ArrayList<String> nombres=new ArrayList<>();
@@ -129,7 +138,8 @@ public class PerfilActiviy  extends AppCompatActivity {
 
 
 
-        builder.setTitle("Deportes");
+        builder.setTitle("Añadir deportes a favoritos");
+
 
          final ListView listview=new ListView(nombre.getContext());
     adapter = new ArrayAdapter<String>(nombre.getContext(), android.R.layout.simple_list_item_multiple_choice, android.R.id.text1, fromColumns);
@@ -140,10 +150,7 @@ public class PerfilActiviy  extends AppCompatActivity {
 
         listview.setAdapter(adapter);
         builder.setView(listview);
-        //builder.setMessage("Ey LOco2");
-        //builder.setMessage("Ey LOco3");
-
-        String positiveText = "Añadir Deporte";
+        String positiveText = "Añadir";
         builder.setPositiveButton(positiveText,
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -170,6 +177,7 @@ public class PerfilActiviy  extends AppCompatActivity {
 
 
         AlertDialog dialog = builder.create();
+        dialog.setTitle("Añadir deportes favoritos");
         // display dialog
         dialog.show();
     }

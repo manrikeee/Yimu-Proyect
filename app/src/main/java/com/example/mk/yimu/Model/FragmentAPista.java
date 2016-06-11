@@ -1,13 +1,16 @@
 package com.example.mk.yimu.Model;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,7 +54,7 @@ public class FragmentAPista extends Fragment implements FSeleccionHora.OnFragmen
     private static final String ARG_PARAM2 = "param2";
     static TextView nombre1, nombrecentro, nombredeporte, nombrepista, hora,fecha;
 
-   static ArrayList<Centro> centros;
+    static ArrayList<Centro> centros;
     static ArrayList<Deporte> deportes;
     static  ArrayList<Espacio> espacios;
     static ArrayList<Espacio_Horario> horarios;
@@ -58,10 +62,13 @@ public class FragmentAPista extends Fragment implements FSeleccionHora.OnFragmen
     static ArrayList<String> spinnercentros;
     static ArrayList<String> spinnerdeportes;
     static ArrayList<String> spinnerpistas;
-   static String localidad = "";
-   static  int id_centro, id_deporte, id_espacio;
-    static Date date;
+    static String localidad = "";
+    static ProgressDialog mProgressDialog;
+    static  int id_centro, id_deporte, id_espacio;
     View view;
+    static Date date;
+
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -78,79 +85,6 @@ public class FragmentAPista extends Fragment implements FSeleccionHora.OnFragmen
         return fragment;
     }
 
-    public static void ObtenerCentros() {
-
-        centros = new ArrayList<>();
-        RestClient restClient = new RestClient();
-        Retrofit retrofit = restClient.getRetrofit();
-        CentroService service = retrofit.create(CentroService.class);
-        Call<List<Centro>> respuesta = service.getCentro(localidad);
-
-
-        respuesta.enqueue(new Callback<List<Centro>>() {
-            @Override
-            public void onResponse(Call<List<Centro>> call, Response<List<Centro>> response) {
-                centros = (ArrayList<Centro>) response.body();
-
-            }
-
-            @Override
-            public void onFailure(Call<List<Centro>> call, Throwable t) {
-
-
-            }
-        });
-    }
-
-    public static void ObtenerHorario() {
-        Date date = Date.valueOf(fecha.getText().toString());
-
-
-        RestClient restClient = new RestClient();
-        Retrofit retrofit = restClient.getRetrofit();
-        EspacioHorarioService service = retrofit.create(EspacioHorarioService.class);
-        Call<List<Espacio_Horario>> respuesta2 = service.getHorarios(id_centro, id_espacio, getDaySemana(date));
-        respuesta2.enqueue(new Callback<List<Espacio_Horario>>() {
-            @Override
-            public void onResponse(Call<List<Espacio_Horario>> call, Response<List<Espacio_Horario>> response) {
-                horarios = (ArrayList<Espacio_Horario>) response.body();
-            }
-
-            @Override
-            public void onFailure(Call<List<Espacio_Horario>> call, Throwable t) {
-                System.out.println("ERROR: " + t.toString());
-
-            }
-        });
-    }
-
-    public static void ObtenerReservas() {
-
-        Date date = Date.valueOf(fecha.getText().toString());
-        RestClient restClient = new RestClient();
-        Retrofit retrofit = restClient.getRetrofit();
-        EspacioHorarioService service = retrofit.create(EspacioHorarioService.class);
-        int dia = getDaySemana(date);
-        Call<List<Espacio_Reserva>> respuesta2 = service.getReservas(id_espacio, date);
-        respuesta2.enqueue(new Callback<List<Espacio_Reserva>>() {
-            @Override
-            public void onResponse(Call<List<Espacio_Reserva>> call, Response<List<Espacio_Reserva>> response) {
-                reservas = (ArrayList<Espacio_Reserva>) response.body();
-            }
-
-            @Override
-            public void onFailure(Call<List<Espacio_Reserva>> call, Throwable t) {
-                System.out.println("ERROR : " + t.toString());
-
-            }
-        });
-    }
-
-    public static int getDaySemana(Date d) {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(d);
-        return cal.get(Calendar.DAY_OF_WEEK);
-    }
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -161,6 +95,7 @@ public class FragmentAPista extends Fragment implements FSeleccionHora.OnFragmen
 
     @Override
     public void onActivityCreated( Bundle savedInstanceState) {
+
         super.onActivityCreated(savedInstanceState);
         final String[] lugares = {"Granada", "Almeria"};
         nombre1.setInputType(InputType.TYPE_NULL);
@@ -310,6 +245,7 @@ public class FragmentAPista extends Fragment implements FSeleccionHora.OnFragmen
         }
     }
 
+
     @Override
 
     public void onAttach(Context context) {
@@ -332,7 +268,40 @@ public class FragmentAPista extends Fragment implements FSeleccionHora.OnFragmen
         mListener = null;
     }
 
+    public static void ObtenerCentros() {
+        mProgressDialog = new ProgressDialog(nombre1.getContext());
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Obteniendo centros...");
+        mProgressDialog.show();
+
+        centros = new ArrayList<>();
+        RestClient restClient = new RestClient();
+        Retrofit retrofit = restClient.getRetrofit();
+        CentroService service = retrofit.create(CentroService.class);
+        Call<List<Centro>> respuesta = service.getCentro(localidad);
+
+
+        respuesta.enqueue(new Callback<List<Centro>>() {
+            @Override
+            public void onResponse(Call<List<Centro>> call, Response<List<Centro>> response) {
+                centros = (ArrayList<Centro>) response.body();
+                mProgressDialog.dismiss();
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Centro>> call, Throwable t) {
+
+
+            }
+        });
+    }
+
     public void ObtenerDeportes() {
+        mProgressDialog = new ProgressDialog(nombre1.getContext());
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Obteniendo deportes...");
+        mProgressDialog.show();
 
         deportes = new ArrayList<>();
         RestClient restClient = new RestClient();
@@ -346,6 +315,7 @@ public class FragmentAPista extends Fragment implements FSeleccionHora.OnFragmen
             @Override
             public void onResponse(Call<List<Deporte>> call, Response<List<Deporte>> response) {
                 deportes = (ArrayList<Deporte>) response.body();
+                mProgressDialog.dismiss();
             }
 
             @Override
@@ -356,6 +326,10 @@ public class FragmentAPista extends Fragment implements FSeleccionHora.OnFragmen
     }
 
     public void  ObtenerPistas() {
+        mProgressDialog = new ProgressDialog(nombre1.getContext());
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Obteniendo Pistas...");
+        mProgressDialog.show();
 
         espacios = new ArrayList<>();
         RestClient restClient = new RestClient();
@@ -367,7 +341,7 @@ public class FragmentAPista extends Fragment implements FSeleccionHora.OnFragmen
             @Override
             public void onResponse(Call<List<Espacio>> call, Response<List<Espacio>> response) {
                 espacios = (ArrayList<Espacio>) response.body();
-
+                mProgressDialog.dismiss();
             }
 
             @Override
@@ -377,6 +351,60 @@ public class FragmentAPista extends Fragment implements FSeleccionHora.OnFragmen
         });
 
     }
+
+    public static void  ObtenerHorario()  {
+
+        Date date= Date.valueOf(fecha.getText().toString());
+        horarios=new ArrayList<>();
+
+        mProgressDialog = new ProgressDialog(nombre1.getContext());
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Cargando Horarios...");
+        mProgressDialog.show();
+        RestClient restClient = new RestClient();
+        Retrofit retrofit = restClient.getRetrofit();
+        EspacioHorarioService service = retrofit.create(EspacioHorarioService.class);
+        Call<List<Espacio_Horario>> respuesta2 = service.getHorarios(id_centro, id_espacio,getDaySemana(date));
+        respuesta2.enqueue(new Callback<List<Espacio_Horario>>() {
+            @Override
+            public void onResponse(Call<List<Espacio_Horario>> call, Response<List<Espacio_Horario>> response) {
+                horarios= (ArrayList<Espacio_Horario>) response.body();
+                ObtenerReservas();
+            }
+
+            @Override
+            public void onFailure(Call<List<Espacio_Horario>> call, Throwable t) {
+                System.out.println("ERROR: "+t.toString());
+
+            }
+        });
+    }
+    public static void ObtenerReservas() {
+        reservas=new ArrayList<>();
+
+        Date date= Date.valueOf(fecha.getText().toString());
+        RestClient restClient = new RestClient();
+        Retrofit retrofit = restClient.getRetrofit();
+        EspacioHorarioService service = retrofit.create(EspacioHorarioService.class);
+        int dia=getDaySemana(date);
+        Call<List<Espacio_Reserva>> respuesta2 = service.getReservas(id_espacio,date);
+        respuesta2.enqueue(new Callback<List<Espacio_Reserva>>() {
+            @Override
+            public void onResponse(Call<List<Espacio_Reserva>> call, Response<List<Espacio_Reserva>> response) {
+                reservas = (ArrayList<Espacio_Reserva>) response.body();
+                mProgressDialog.dismiss();
+                Log.d("RESERVAS",""+reservas.toString());
+            }
+
+            @Override
+            public void onFailure(Call<List<Espacio_Reserva>> call, Throwable t) {
+                System.out.println("ERROR : "+t.toString());
+                mProgressDialog.dismiss();
+
+            }
+        });
+    }
+
 
     public Time crearRango(Time time,int bloque) {
         String myTime = time.toString();
@@ -394,7 +422,6 @@ public class FragmentAPista extends Fragment implements FSeleccionHora.OnFragmen
         return time1;
 
     }
-
     public Date  ConvertStringtoDate(String d){
     /*
         java.util.Date date = null;
@@ -409,6 +436,13 @@ public class FragmentAPista extends Fragment implements FSeleccionHora.OnFragmen
 
         return sql;
 
+    }
+
+
+    public static int getDaySemana(Date d){
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(d);
+        return cal.get(Calendar.DAY_OF_WEEK);
     }
 
 

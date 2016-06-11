@@ -118,6 +118,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.g) {
             Intent intent = new Intent(MainActivity.this, PerfilActiviy.class);
             startActivity(intent);
+         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+
         } else if (id == R.id.f) {
             fragment = new FMostrarActividades();
             fragmentTransaction = true;
@@ -127,6 +129,8 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment1, fragment)
                     .commit();
+            overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+
 
             //menuItem.setChecked(true);
             //getSupportActionBar().setTitle(menuItem.getTitle());

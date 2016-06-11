@@ -1,7 +1,10 @@
 package com.example.mk.yimu;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.app.ProgressDialog;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -78,6 +81,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mLoginFormView;
     private TextView txtView;
     private int status;
+    public static ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +95,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         txtView = (TextView) findViewById(R.id.link);
         final int op;
         mPasswordView = (EditText) findViewById(R.id.password);
+        mProgressView=  findViewById(R.id.login_progress);
+
+
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -118,44 +125,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void onClick(View view) {
                 // hiloconexion = new WebService.ObtenerWebService();
                 //hiloconexion.execute(WebService.LOGIN, "2", mEmail.toString(),mPassword.toString());
-                //attemptLogin();
-                String userr = mEmailView.getText().toString();
-                String pw = mPasswordView.getText().toString();
-               final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                //startActivity(intent);
-                RestClient restClient =new RestClient();
-                Retrofit retrofit=restClient.getRetrofit();
-                UsuarioService service = retrofit.create(UsuarioService.class);
-                final Call<Usuario> respuesta= service.getUser(userr, pw);
-                respuesta.enqueue(new Callback<Usuario>() {
-                    @Override
-                    public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                        Usuario.nombre1=response.body().getNombre();
-                        Usuario.email1=response.body().getEmail();
-                        Usuario.id1=response.body().getId();
-                        recibirDeportes();
-                        recibirDeportesDisponibles();
-                        proceso(response);
-
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<Usuario> call, Throwable t) {
-                        System.out.println(t.getMessage());
-
-                    }
-
-
-
-
-                });
+             attemptLogin();
 
 
             }
         });
         //mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+
     }
 
     public void proceso(Response<Usuario> response) {
@@ -163,6 +139,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         estado=response.body().getEstado();
         System.out.println("XXXXXXXXXXXXXXXXXXXX: "+response.body().getNombre()+"EEEEEEEE "+usuario.getNombre());
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//        showProgress(false);
         startActivity(intent);
         iniciarActivity();
     }
@@ -265,29 +242,65 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // form field with an error.
             focusView.requestFocus();
         } else {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setMessage("Conectando..");
+            mProgressDialog.show();
+            String userr = mEmailView.getText().toString();
+            String pw = mPasswordView.getText().toString();
+            final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            //startActivity(intent);
+            RestClient restClient =new RestClient();
+            Retrofit retrofit=restClient.getRetrofit();
+            UsuarioService service = retrofit.create(UsuarioService.class);
+            final Call<Usuario> respuesta= service.getUser(userr, pw);
+            respuesta.enqueue(new Callback<Usuario>() {
+                @Override
+                public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                    Usuario.nombre1=response.body().getNombre();
+                    Usuario.email1=response.body().getEmail();
+                    Usuario.id1=response.body().getId();
+                    recibirDeportes();
+                    recibirDeportesDisponibles();
+                    proceso(response);
+
+
+                }
+
+                @Override
+                public void onFailure(Call<Usuario> call, Throwable t) {
+                    System.out.println(t.getMessage());
+
+                }
+
+
+
+
+            });
+
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            //showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+//         showProgress(true);
+            //mAuthTask = new UserLoginTask(email, password);
+            //mAuthTask.execute((Void) null);
         }
     }
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return email.length()>3;
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 3;
     }
 
     /**
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-   /* private void showProgress(final boolean show) {
+    private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
@@ -317,7 +330,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
-    }*/
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
@@ -463,6 +476,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onResponse(Call<List<Deporte>> call, Response<List<Deporte>> response) {
                 deportes_disponibles=response.body();
+
+
                 Log.e("COMPLETADO",""+response.body().toString());
             }
 

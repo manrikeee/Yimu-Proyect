@@ -15,11 +15,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.mk.yimu.Interface.ActividadService;
+import com.example.mk.yimu.LoginActivity;
 import com.example.mk.yimu.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -81,7 +86,10 @@ public class FragmentCactividad extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.f_crearactividad, container, false);
-        final String[] deportes = {"Futbol", "Padel", "Baloncesto"};
+        final List<String>deportes= new ArrayList<>();
+        for (Deporte deportess: LoginActivity.deportes_disponibles){
+            deportes.add(deportess.getNombre());
+        }
 
 
         final EditText nombre1 = (EditText) view.getRootView().findViewById(R.id.nombredeporte);
@@ -95,7 +103,7 @@ public class FragmentCactividad extends Fragment {
                         .setAdapter(spinner, new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int which) {
-                                nombre1.setText(deportes[which].toString());
+                                nombre1.setText(deportes.get(which).toString());
                                 dialog.dismiss();
                             }
                         }).create().show();
@@ -126,10 +134,11 @@ public class FragmentCactividad extends Fragment {
                 Retrofit retrofit=restClient.getRetrofit();
                 ActividadService service = retrofit.create(ActividadService.class);
                 final Call<String> respuesta = service.CrearActividad(deporte, "2016-05-17", "10:00:00", Usuario.id1, 1, max_personas, plazas_disponibles,lugar,"Principiante");
-
+                Toast.makeText(getContext(), "Actividad Creada", Toast.LENGTH_SHORT).show();
                 respuesta.enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
+
 
                     }
 

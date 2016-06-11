@@ -98,6 +98,7 @@ public class FMostrarActividades extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         view = inflater.inflate(R.layout.ventana_items, container, false);
         //participar = (Button) view.findViewById(R.id.button);
 
